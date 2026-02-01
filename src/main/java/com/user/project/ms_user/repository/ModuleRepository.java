@@ -10,7 +10,7 @@ import java.util.List;
 public interface ModuleRepository extends JpaRepository<Module,Long> {
 
     @Query(value = """
-    select m.code, m.name, m.description
+    select m.id, m.code, m.name, m.description
     from navigate.module m
     left join public.role_modules rm on m.id = rm.module_id
     left join users.role r on r.id = rm.role_id

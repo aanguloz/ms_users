@@ -13,8 +13,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,8 +70,29 @@ public class RoleAssignmentServiceImpl implements RoleAssignmentService {
     }
 
     @Override
-    public RoleRespDTO getRoleWithModule() {
-        return null;
+    public List<RoleRespDTO> getRoleWithModule() {
+        List<Object[]> roleWithModule = roleRepository.listRoles();
+        Map<Long, RoleRespDTO> roleMap = new HashMap<>();
+
+        for (Object[] row : roleWithModule) {
+            Long roleId = ((Number) row[0]).longValue();
+            String roleName = (String) row[1];
+
+            RoleRespDTO roleDto = roleMap.computeIfAbsent(roleId,
+                    id -> new RoleRespDTO(id, roleName));
+            // Verificar si hay módulo asociado (puede ser null por LEFT JOIN)
+            if (row[2] != null) {
+                Long moduleId = ((Number) row[2]).longValue();
+                ModuleRespDTO module = new ModuleRespDTO(
+                        moduleId,
+                        (String) row[3], // code
+                        (String) row[4], // name
+                        (String) row[5]  // description
+                );
+                roleDto.getModules().add(module);
+            }
+        }
+        return new ArrayList<>(roleMap.values());
     }
 
     @Override

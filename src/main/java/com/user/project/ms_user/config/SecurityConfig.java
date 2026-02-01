@@ -26,26 +26,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /*@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .authorizeRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/auth/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                ).oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                );
-        return http.build();
-    }*/
-
-//    @Bean
-//    public JwtDecoder jwtDecoder() {
-//        byte[] secretKeyBytes = jwtSecret.getBytes();
-//        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKeyBytes, "HmacSHA256");
-//        return NimbusJwtDecoder.withSecretKey(secretKeySpec).build();
-//    }
-
     @Bean
     public JwtDecoder jwtDecoder() {
         // Decodificar la clave secreta desde base64
@@ -54,42 +34,16 @@ public class SecurityConfig {
         return NimbusJwtDecoder.withSecretKey(secretKeySpec).build();
     }
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http.csrf(csrf -> csrf.disable())
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/**").permitAll()
-//                        .requestMatchers("/auth/**").permitAll()
-//                        .requestMatchers("/api/auth/admin/**").hasRole("ADMIN")
-//                        .anyRequest().authenticated()
-//                );
-//        // ⚠️ ELIMINA ESTO:
-//        // .oauth2ResourceServer(oauth2 -> oauth2
-//        //     .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-//        // );
-//        return http.build();
-//    }
-
-
-    /*private JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter authoritiesConverter =
-                new JwtGrantedAuthoritiesConverter();
-        authoritiesConverter.setAuthorityPrefix("ROLE_");
-        authoritiesConverter.setAuthoritiesClaimName("roles");
-
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
-        return jwtAuthenticationConverter;
-    }*/
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/auth/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/module/**").authenticated()
-                        .requestMatchers("/api/user/**").authenticated()
+                        .requestMatchers("/api/**").authenticated()
+//                        .requestMatchers("/api/module/**").authenticated()
+//                        .requestMatchers("/api/user/**").authenticated()
+//                        .requestMatchers("/api/role/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

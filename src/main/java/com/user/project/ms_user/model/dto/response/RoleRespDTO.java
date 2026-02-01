@@ -19,4 +19,14 @@ public class RoleRespDTO {
 
     Set<ModuleRespDTO> modules = new HashSet<>();
 
+    public RoleRespDTO(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    public RoleRespDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

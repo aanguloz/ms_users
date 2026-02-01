@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/role")
 @RequiredArgsConstructor
@@ -31,7 +33,7 @@ public class RoleAssignmentModuleController {
     ResponseEntity<ApiResponseDTO<?>> getAllRoles()
         throws Exception {
         try {
-            RoleRespDTO result = roleAssignmentService.getRoleWithModule();
+            List<RoleRespDTO> result = roleAssignmentService.getRoleWithModule();
             return ResponseEntity.ok(new ApiResponseDTO<>(true, result, null));
         } catch (Exception e) {
             return ResponseEntity.ok(new ApiResponseDTO<>(false, e.getCause(), e.getMessage()));
